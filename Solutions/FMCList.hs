@@ -9,6 +9,7 @@ import Prelude
     , (.) , ($)
     , flip , curry , uncurry
     , otherwise , error , undefined
+    , not
     )
 import qualified Prelude   as P
 import qualified Data.List as L
@@ -112,10 +113,15 @@ xs +++ (y:ys) = (xs +++ [y]) +++ ys
 -- (hmm?!)
 infixl 5 +++
 
--- minimum :: Ord a => [a] -> a
--- minimum [] = error "List empty"
+minimum :: Ord a => [a] -> a
+minimum [] = error "List empty"
+minimum [x] = x
+minimum (x:y:ys) = if (x < y) then minimum $ x:ys else minimum $ y:ys
 
--- maximum :: Ord a => [a] -> a
+maximum :: Ord a => [a] -> a
+maximum [] = error "List empty"
+maximum [x] = x
+maximum (x:y:ys) = if (x > y) then maximum $ x:ys else maximum $ y:ys
 
 take :: Int -> [a] -> [a]
 take _ [] = []
@@ -127,8 +133,12 @@ drop 0 ls = ls
 drop _ [] = []
 drop i (_:as) = drop (i - 1) as
 
-takeWhile :: (a -> b -> Bool) -> [c] -> [c]
--- takeWhile 0 
+takeWhile :: (a -> Bool) -> [a] -> [a]
+takeWhile p [] = []
+takeWhile p (a:as) = if (p a) then (a : (takeWhile p as)) else takeWhile p as
+dropWhile :: (a -> Bool) -> [a] -> [a]
+dropWhile p [] = []
+dropWhile p (a:as) = if (p a) then (a : (dropWhile p as)) else dropWhile p as
 -- dropWhile
 
 -- tails
@@ -152,8 +162,13 @@ takeWhile :: (a -> b -> Bool) -> [c] -> [c]
 
 -- (!!)
 
--- filter
--- map
+filter :: (a -> Bool) -> [a] -> [a]
+filter p [] = []
+filter p (a:as) = if (p a) then a:filter p as else filter p as
+
+map :: (a -> b) -> [a] -> [b]
+map f [] = []
+map f (a:as) = f a: map f as
 
 -- cycle
 -- repeat
@@ -182,9 +197,27 @@ takeWhile :: (a -> b -> Bool) -> [c] -> [c]
 
 -- transpose
 
+isAlpha :: Char -> Bool
+isAlpha c = let fromE = (fromEnum c :: Int) in 
+            fromE >= 65 && fromE <= 90 || fromE >= 97 && fromE <= 122
+
+
+isLower :: Char -> Bool
+isLower c = (P.fromEnum c :: Int) > 90
+
+toLower :: Char -> Char
+toLower c = if isAlpha c
+                then
+                    if isLower c
+                        then c
+                        else toEnum ((fromEnum c :: Int) + 32) :: Char
+                else c
+
 -- checks if the letters of a phrase form a palindrome (see below for examples)
 palindrome :: String -> Bool
-palindrome = undefined
+palindrome [] = True
+palindrome ls = let c = filter isAlpha $ map toLower ls in
+                c == reverse c
 
 {-
 

@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 
-module ExList where
+module FMCFun where
 
 import Prelude hiding
     ( (.) , ($)
@@ -27,7 +27,7 @@ flip f b a = f a b
 
 -- (.) takes two composable functions and returns their composition
 (.) :: (b -> c) -> (a -> b) -> a -> c
-(.) f g a = f (g a)
+(f . g) a = f (g a)
 
 -- (.>) is composition but in diagramatic notation (should be ; but Haskell forbids)
 (.>) = flip (.)
@@ -35,7 +35,7 @@ flip f b a = f a b
 -- ($) takes a function and a suitable argument and applies the function to the argument
 -- think: why would we ever want that?
 ($) :: (a -> b) -> a -> b
-($) f a = f a
+f $ a = f a
 
 -- iterate: figure it out by its type
 iterate :: (a -> a) -> a -> [a]
