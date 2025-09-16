@@ -82,16 +82,18 @@ infixl 7 *
 infixr 8 ^
 
 -- quotient
--- WARN: unfinished
 -- (/) :: Nat -> Nat -> Nat
--- (/) O _ = zero
--- (/) (S O) n = S O
--- (/) n m = S ((monus n m) / m )
+-- WARN: UNFINISHED
+-- (/) _ O = zero
+-- (/) n m = S ((/) n (monus m n))
 
 -- remainder
+-- WARN: UNFINISHED
 -- (%) :: Nat -> Nat -> Nat
--- WARN: unfinished
--- (%) = undefined
+-- (%) _ O = O
+-- (%) _ (S O) = O
+-- (%) n m = S ((%) n (monus m n))
+
 
 -- divides
 -- just for a change, we start by defining the "symbolic" operator
