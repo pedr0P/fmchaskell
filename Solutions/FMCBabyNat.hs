@@ -81,14 +81,27 @@ infixl 7 *
 -- decision:
 infixr 8 ^
 
--- quotient
--- (/) :: Nat -> Nat -> Nat
--- WARN: UNFINISHED
--- (/) _ O = zero
--- (/) n m = S ((/) n (monus m n))
+meuif :: Nat -> (Nat -> Nat -> Nat) -> Nat -> Nat-> Nat -> Nat
+meuif O _ a b n = n
+meuif (S O) (f) a b _ = f a b
 
--- remainder
+-- S O = true
+-- O   = false
+(<) :: Nat -> Nat -> Nat
+(<) O O = zero
+(<) O _ = one
+(<) _ O = zero
+(<) (S n) (S m) = (<) n m
+
 -- WARN: UNFINISHED
+-- quotient
+(/) :: Nat -> Nat -> Nat
+(/) _ O = zero
+(/) n m = meuif 
+
+
+-- WARN: UNFINISHED
+-- remainder
 -- (%) :: Nat -> Nat -> Nat
 -- (%) _ O = O
 -- (%) _ (S O) = O
