@@ -81,23 +81,11 @@ infixl 7 *
 -- decision:
 infixr 8 ^
 
-meuif :: Nat -> (Nat -> Nat -> Nat) -> Nat -> Nat-> Nat -> Nat
-meuif O _ a b n = n
-meuif (S O) (f) a b _ = f a b
-
--- S O = true
--- O   = false
-(<) :: Nat -> Nat -> Nat
-(<) O O = zero
-(<) O _ = one
-(<) _ O = zero
-(<) (S n) (S m) = (<) n m
-
 -- WARN: UNFINISHED
 -- quotient
-(/) :: Nat -> Nat -> Nat
-(/) _ O = zero
-(/) n m = meuif 
+-- (/) :: Nat -> Nat -> Nat
+-- (/) _ O = zero
+-- (/) n m = S ((/) (monus n n) m)
 
 
 -- WARN: UNFINISHED
@@ -134,7 +122,17 @@ sg :: Nat -> Nat
 sg O = zero
 sg _ = one
 
+meuif :: Nat -> (Nat -> Nat -> Nat) -> Nat -> Nat
+meuif O f n = n 
+meuif (S O) f n = n 
+
+lg :: Nat -> Nat -> Nat
+lg = S lo
 -- lo b a is the floor of the logarithm base b of a
 lo :: Nat -> Nat -> Nat
-lo = undefined
+lo O O = S O
+lo _ O = seven
+lo O _ = seven
+-- lo n m = meuif 
+
 
