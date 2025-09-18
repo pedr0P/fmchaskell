@@ -1,7 +1,7 @@
 module FMCBabyNat where
 
 -- Do not alter this import!
-import Prelude ( Show(..) , Eq(..) , undefined, IO(..), putStrLn, getLine)
+import Prelude ( Show(..) , Eq(..) , undefined )
 
 -- Define evenerything that is undefined,
 -- without using standard Haskell functions.
