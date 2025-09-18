@@ -139,22 +139,13 @@ sg :: Nat -> Nat
 sg O = zero
 sg _ = one
 
--- lg :: Nat -> Nat -> Nat
--- lg = S lo
-
--- PEDRO's
--- not
-not :: Nat -> Nat
-not O = one
-not _ = zero
-
 -- PEDRO's
 -- less than or equal to
 (<=) :: Nat -> Nat -> Nat
 (<=) O _ = one
 (<=) _ O = zero
 (<=) (S n) (S m) = (<=) n m
--- ,q:
+
 -- lo b a is the floor of the logarithm base b of a
 lo :: Nat -> Nat -> Nat
 lo O _ = O
