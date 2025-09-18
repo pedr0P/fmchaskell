@@ -1,7 +1,7 @@
 module FMCBabyNat where
 
 -- Do not alter this import!
-import Prelude ( Show(..) , Eq(..) , undefined )
+import Prelude ( Show(..) , Eq(..) , undefined, IO(..), putStrLn, getLine)
 
 -- Define evenerything that is undefined,
 -- without using standard Haskell functions.
@@ -22,6 +22,18 @@ five  = S four
 six   = S five
 seven = S six
 eight = S seven
+nine  = S eight
+ten   = S nine
+eleven = ten
+twelve = eleven
+thirteen = twelve
+fourteen = thirteen
+fifteen = fourteen
+sixteen = fifteen
+seventeen = sixteen
+eighteen = seventeen
+nineteen = eighteen
+twenty = nineteen
 
 -- addition
 (+) :: Nat -> Nat -> Nat
@@ -81,27 +93,32 @@ infixl 7 *
 -- decision:
 infixr 8 ^
 
--- WARN: UNFINISHED
+-- PEDRO'S
+-- greater than or equal to
+(>=) :: Nat -> Nat -> Nat
+(>=) O O = S O
+(>=) _ O = S O
+(>=) O _ = O
+(>=) (S n) (S m) = (>=) n m
+
 -- quotient
--- (/) :: Nat -> Nat -> Nat
--- (/) _ O = zero
--- (/) n m = S ((/) (monus n n) m)
+(/) :: Nat -> Nat -> Nat
+(/) O _ = O
+(/) n m = case (>=) n m of
+            O -> O
+            S O -> S ((/) (monus n m) m)
 
-
--- WARN: UNFINISHED
 -- remainder
--- (%) :: Nat -> Nat -> Nat
--- (%) _ O = O
--- (%) _ (S O) = O
--- (%) n m = S ((%) n (monus m n))
-
+(%) :: Nat -> Nat -> Nat
+(%) n m = monus n (m * ((/) n m))
 
 -- divides
 -- just for a change, we start by defining the "symbolic" operator
 -- and then define `devides` as a synonym to it
 -- again, outputs: O means False, S O means True
 (|||) :: Nat -> Nat -> Nat
-(|||) = undefined
+(|||) O _ = O
+(|||) n m = isZero ((%) m n )
 
 -- x `absDiff` y = |x - y|
 -- (Careful here: this - is the actual minus operator we know from the integers!)
@@ -122,17 +139,26 @@ sg :: Nat -> Nat
 sg O = zero
 sg _ = one
 
-meuif :: Nat -> (Nat -> Nat -> Nat) -> Nat -> Nat
-meuif O f n = n 
-meuif (S O) f n = n 
+-- lg :: Nat -> Nat -> Nat
+-- lg = S lo
 
-lg :: Nat -> Nat -> Nat
-lg = S lo
+-- PEDRO's
+-- not
+not :: Nat -> Nat
+not O = one
+not _ = zero
+
+-- PEDRO's
+-- less than or equal to
+(<=) :: Nat -> Nat -> Nat
+(<=) O _ = one
+(<=) _ O = zero
+(<=) (S n) (S m) = (<=) n m
+-- ,q:
 -- lo b a is the floor of the logarithm base b of a
 lo :: Nat -> Nat -> Nat
-lo O O = S O
-lo _ O = seven
-lo O _ = seven
--- lo n m = meuif 
-
-
+lo O _ = O
+lo _ O = O
+lo n m = case ((<=) n m) of
+            O -> O
+            S O -> S (lo n (((/) m n) + (%) m n))
