@@ -24,16 +24,16 @@ seven = S six
 eight = S seven
 nine  = S eight
 ten   = S nine
-eleven = ten
-twelve = eleven
-thirteen = twelve
-fourteen = thirteen
-fifteen = fourteen
-sixteen = fifteen
-seventeen = sixteen
-eighteen = seventeen
-nineteen = eighteen
-twenty = nineteen
+eleven = S ten
+twelve = S eleven
+thirteen = S twelve
+fourteen = S thirteen
+fifteen = S fourteen
+sixteen = S fifteen
+seventeen = S sixteen
+eighteen = S seventeen
+nineteen = S eighteen
+twenty = S nineteen
 
 -- addition
 (+) :: Nat -> Nat -> Nat
@@ -96,10 +96,10 @@ infixr 8 ^
 -- PEDRO'S
 -- greater than or equal to
 (>=) :: Nat -> Nat -> Nat
-(>=) O O = S O
 (>=) _ O = S O
 (>=) O _ = O
 (>=) (S n) (S m) = (>=) n m
+infix 5 >=
 
 -- quotient
 (/) :: Nat -> Nat -> Nat
@@ -148,8 +148,10 @@ sg _ = one
 
 -- lo b a is the floor of the logarithm base b of a
 lo :: Nat -> Nat -> Nat
-lo O _ = O
-lo _ O = O
-lo n m = case ((<=) n m) of
-            O -> O
-            S O -> S (lo n (((/) m n) + (%) m n))
+lo O _ = undefined
+lo _ O = undefined
+lo n m
+  | n == one              = undefined
+  | isZero (m / n) == S O = O
+  | isZero (m / n) == O = one + lo n (m / n)
+
