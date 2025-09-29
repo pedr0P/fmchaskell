@@ -15,6 +15,7 @@ import Prelude
     , undefined
     , error
     , otherwise
+    , (++)
     )
 
 -- Define evenerything that is undefined,
@@ -29,27 +30,54 @@ data Nat where
 -- typeclass implementations
 ----------------------------------------------------------------
 
+-- some sugar
+zero, one, two, three, four, five, six, seven, eight :: Nat
+zero  = O
+one   = S zero
+two   = S one
+three = S two
+four  = S three
+five  = S four
+six   = S five
+seven = S six
+eight = S seven
+nine  = S eight
+ten   = S nine
+eleven = S ten
+twelve = S eleven
+thirteen = S twelve
+fourteen = S thirteen
+fifteen = S fourteen
+sixteen = S fifteen
+seventeen = S sixteen
+eighteen = S seventeen
+nineteen = S eighteen
+twenty = S nineteen
 instance Show Nat where
-
     -- zero  should be shown as O
     -- three should be shown as SSSO
-    show = undefined
+    show O = "O"
+    show (S n) = "S" ++ show n
 
 instance Eq Nat where
-
-    (==) = undefined
+    (==) O O = True
+    (==) (S n) (S m) = (==) n m
+    (==) _ _ = False
 
 instance Ord Nat where
-
-    (<=) = undefined
+    (<=) O _ = True
+    (<=) _ O = False
+    (<=) (S n) (S m) = (<=) n m
 
     -- Ord does not REQUIRE defining min and max.
     -- Howevener, you should define them WITHOUT using (<=).
     -- Both are binary functions: max m n = ..., etc.
 
-    min = undefined
-
-    max = undefined
+    min (S n) (S m) = S (min n m)
+    min _ _ = O
+    max (S n) (S m) = S (min n m)
+    max n O = n
+    max O m = m
 
 
 ----------------------------------------------------------------
@@ -57,18 +85,23 @@ instance Ord Nat where
 ----------------------------------------------------------------
 
 isZero :: Nat -> Bool
-isZero = undefined
+isZero O = True
+isZero _ = False
 
 -- pred is the predecessor but we define zero's to be zero
 pred :: Nat -> Nat
-pred = undefined
+pred O = O
+pred (S n) = n
 
 even :: Nat -> Bool
-even = undefined
+even O = True
+even (S O) = False
+even (S (S n)) = even n
 
 odd :: Nat -> Bool
-odd = undefined
-
+odd O = False
+odd (S O) = True
+odd (S (S n)) = odd n
 
 ----------------------------------------------------------------
 -- operations
@@ -76,31 +109,36 @@ odd = undefined
 
 -- addition
 (<+>) :: Nat -> Nat -> Nat
-(<+>) = undefined
+n (<+>) O = n
+n (<+>) (S m) = S ((<+>) n m)
 
 -- This is called the dotminus or monus operator
 -- (also: proper subtraction, arithmetic subtraction, ...).
 -- It behaves like subtraction, except that it returns 0
 -- when "normal" subtraction would return a negative number.
 monus :: Nat -> Nat -> Nat
-monus = undefined
+monus n O = n
+monus O _ = O
+monus (S n) (S m) = monus n m
 
 (-*) :: Nat -> Nat -> Nat
-(-*) = undefined
+(-*) = monus
 
 -- multiplication
 times :: Nat -> Nat -> Nat
-times = undefined
+times _ O = O
+times n (S m) = n + (n * m)
 
 (<*>) :: Nat -> Nat -> Nat
 (<*>) = times
 
 -- power / exponentiation
 pow :: Nat -> Nat -> Nat
-pow = undefined
+pow _ O = one
+pow n (S m) = n * (pow n m)
 
 exp :: Nat -> Nat -> Nat
-exp = undefined
+exp = pow
 
 (<^>) :: Nat -> Nat -> Nat
 (<^>) = undefined
@@ -163,7 +201,7 @@ instance Num Nat where
 
     (+) = (<+>)
     (*) = (<*>)
-    (-) = (<->)
+    (-) = (-*)
     abs n = n
     signum = sg
     fromInteger x
