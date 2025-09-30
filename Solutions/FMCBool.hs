@@ -34,10 +34,14 @@ instance Show Bool where
     show False = "False" 
 
 instance Enum Bool where
-    fromEnum True  = 1
-    fromEnum False = 0
     toEnum 1 = True
     toEnum 0 = False
+    toEnum _ = error "argumentos ruins"
+
+    fromEnum :: Bool -> Int
+    fromEnum True  = 1
+    fromEnum False = 0
+
 
 -- conjunction (AND)
 (&&) :: Bool -> Bool -> Bool
