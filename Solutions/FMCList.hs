@@ -58,28 +58,37 @@ write [u,v]     for our u `Cons` (v `Cons` Nil)
 -}
 
 head :: [a] -> a
-head = undefined
+head (a:_) = a
+head [] = error "No head"
 
 tail :: [a] -> [a]
-tail = undefined
+tail (_:as) = as
+tail [] = error "No tail"
 
 null :: [a] -> Bool
-null = undefined
+null [] = True
+null _ = False
 
 length :: Integral i => [a] -> i
-length = undefined
+length [] = 0
+length (_:as) = 1 + length as
 
 sum :: Num a => [a] -> a
-sum = undefined
+sum [] = 0
+sum (a:as) = a + sum as
 
 product :: Num a => [a] -> a
-product = undefined
+product [] = 0
+product (a:[]) = a
+product (a:as) = a * product as
 
 reverse :: [a] -> [a]
-reverse = undefined
+reverse [] = []
+reverse (a:as) = (reverse as) ++ [a]
 
 (++) :: [a] -> [a] -> [a]
-(++) = undefined
+(++) [] bs = bs
+(++) (a:as) bs = a : as ++ bs
 
 -- right-associative for performance!
 -- (what?!)
@@ -87,7 +96,8 @@ infixr 5 ++
 
 -- (snoc is cons written backwards)
 snoc :: a -> [a] -> [a]
-snoc = undefined
+snoc a [] = [a]
+snoc a (b:bs) = b : snoc a bs
 
 (<:) :: [a] -> a -> [a]
 (<:) = flip snoc
