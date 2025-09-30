@@ -113,12 +113,22 @@ xs +++ (y:ys) = (xs +++ [y]) +++ ys
 infixl 5 +++
 
 -- minimum :: Ord a => [a] -> a
+-- minimum [] = error "List empty"
+
 -- maximum :: Ord a => [a] -> a
 
--- take
--- drop
+take :: Int -> [a] -> [a]
+take _ [] = []
+take 0 _ = []
+take i (a:as) = a : take (i - 1) as
 
--- takeWhile
+drop :: Int -> [a] -> [a]
+drop 0 ls = ls
+drop _ [] = []
+drop i (_:as) = drop (i - 1) as
+
+takeWhile :: (a -> b -> Bool) -> [c] -> [c]
+-- takeWhile 0 
 -- dropWhile
 
 -- tails
