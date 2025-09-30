@@ -36,9 +36,8 @@ instance Show Bool where
 instance Enum Bool where
     toEnum 1 = True
     toEnum 0 = False
-    toEnum _ = error "argumentos ruins"
+    toEnum _ = error "toEnum a :: Bool where a > 1 does not exist"
 
-    fromEnum :: Bool -> Int
     fromEnum True  = 1
     fromEnum False = 0
 
