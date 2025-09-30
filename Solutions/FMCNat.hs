@@ -109,8 +109,8 @@ odd (S (S n)) = odd n
 
 -- addition
 (<+>) :: Nat -> Nat -> Nat
-n (<+>) O = n
-n (<+>) (S m) = S ((<+>) n m)
+n <+> O = n
+n <+> (S m) = S (n <+> m)
 
 -- This is called the dotminus or monus operator
 -- (also: proper subtraction, arithmetic subtraction, ...).
@@ -141,45 +141,54 @@ exp :: Nat -> Nat -> Nat
 exp = pow
 
 (<^>) :: Nat -> Nat -> Nat
-(<^>) = undefined
+(<^>) = exp
 
 -- quotient
 (</>) :: Nat -> Nat -> Nat
-(</>) = undefined
+O </> _ = O
+n </> m = if (n >= m) then S ((n -* m) </> m) else O
 
 -- remainder
 (<%>) :: Nat -> Nat -> Nat
-(<%>) = undefined
+n <%> m = monus n (m * (n </> m))
 
 -- euclidean division
-eucdiv :: (Nat, Nat) -> (Nat, Nat)
-eucdiv = undefined
+-- eucdiv :: (Nat, Nat) -> (Nat, Nat)
+-- eucdiv (n, m)= ()
 
 -- divides
 (<|>) :: Nat -> Nat -> Bool
-(<|>) = undefined
+(<|>) n m = if (n <%> m == O) then True else False
 
 divides = (<|>)
-
 
 -- distance between nats
 -- x `dist` y = |x - y|
 -- (Careful here: this - is the real minus operator!)
 dist :: Nat -> Nat -> Nat
-dist = undefined
+dist n O = n
+dist O n = n
+dist (S n) (S m) = dist n m
 
 (|-|) = dist
 
 factorial :: Nat -> Nat
-factorial = undefined
+factorial O = one
+factorial (S n) = (S n) * (factorial n)
 
 -- signum of a number (-1, 0, or 1)
 sg :: Nat -> Nat
-sg = undefined
+sg O = zero
+sg _ = one
 
 -- lo b a is the floor of the logarithm base b of a
 lo :: Nat -> Nat -> Nat
-lo = undefined
+lo O _ = error "Logarithm at base 0"
+lo _ O = error "Logarithm of 0"
+lo (S O) _ = error "Logarithm at base 1"
+lo n m
+  | (m </> n) == S O = O
+  | otherwise = one + lo n (m </> n)
 
 
 ----------------------------------------------------------------
@@ -190,22 +199,23 @@ lo = undefined
 -- Do NOT use the following functions in the definitions above!
 
 toNat :: Integral a => a -> Nat
-toNat = undefined
+toNat 0 = O
+toNat i = S (toNat (i-1))
 
 fromNat :: Integral a => Nat -> a
-fromNat = undefined
+fromNat O = 0
+fromNat (S n) = 1 + (fromNat n)
 
 
 -- Voilá: we can now easily make Nat an instance of Num.
 instance Num Nat where
-
     (+) = (<+>)
     (*) = (<*>)
     (-) = (-*)
     abs n = n
     signum = sg
     fromInteger x
-      | x < 0     = undefined
-      | x == 0    = undefined
-      | otherwise = undefined
+      | x < 0     = error "Negative integer does not have Nat counterpart"
+      | x == 0    = toNat x
+      | otherwise = toNat x
 
